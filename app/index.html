@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0a4d3c">
+  <title>Paracel · Humor Social</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <img id="logo" class="logo" alt="Paracel">
+    <div class="titleblock">
+      <div id="appTitle" class="title">Paracel · Humor Social</div>
+      <div class="subtitle">Captura offline de percepciones, señales tempranas y riesgo de conflicto</div>
+    </div>
+    <div class="right">
+      <div id="netPill" class="pill">Offline</div>
+      <button id="btnLogout" class="btn secondary" style="display:none;">Salir</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="cardLogin" class="card">
+      <h2>Acceso</h2>
+      <p class="muted">Login simple. En la hoja <b>usuarios</b>, la columna <b>hash_password</b> puede contener contraseña en claro o SHA-256 (64 hex). Se recomienda SHA-256.</p>
+      <label>Usuario</label>
+      <input id="loginUser" autocomplete="username" placeholder="usuario">
+      <label>Contraseña</label>
+      <input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••">
+      <div class="row">
+        <button id="btnLogin" class="btn">Ingresar</button>
+        <button id="btnClear" class="btn secondary">Limpiar</button>
+      </div>
+      <div id="loginMsg"></div>
+      <div class="hr"></div>
+      <p class="muted">Modo offline, la encuesta se guarda en el teléfono y se sincroniza cuando vuelve la conexión.</p>
+    </section>
+
+    <section id="cardApp" class="card" style="display:none;">
+      <div class="tabs">
+        <button id="tabForm" class="tab active">Encuesta</button>
+        <button id="tabDash" class="tab" style="display:none;">Tablero</button>
+      </div>
+
+      <section id="panelForm">
+        <h2>Encuesta</h2>
+        <p class="muted">Las preguntas se descargan cuando hay conexión y se guardan en caché. Si no hay conexión, se usa el último set disponible.</p>
+
+        <div class="hr"></div>
+
+        <div class="grid3">
+          <div>
+            <label>Tipo de informante</label>
+            <select id="metaTipo">
+              <option value="">Seleccione</option>
+              <option value="oficina">Oficina</option>
+              <option value="comunidad">Comunidad</option>
+            </select>
+          </div>
+          <div>
+            <label>Área</label>
+            <input id="metaArea" placeholder="Ej.: Industrial, Forestal, Social">
+          </div>
+          <div>
+            <label>Comunidad o Localidad</label>
+            <input id="metaComunidad" placeholder="Ej.: Comunidad X">
+          </div>
+        </div>
+
+        <label>Comentario general (opcional)</label>
+        <textarea id="metaComentario" placeholder="Contexto, actores, hechos, fechas, señales"></textarea>
+
+        <div class="hr"></div>
+
+        <div id="questions"></div>
+
+        <div class="row">
+          <button id="btnSaveLocal" class="btn secondary">Guardar en el teléfono</button>
+          <button id="btnSendNow" class="btn">Enviar ahora</button>
+          <button id="btnSync" class="btn secondary">Sincronizar pendientes</button>
+        </div>
+
+        <div id="formMsg"></div>
+
+        <div class="hr"></div>
+        <div class="row">
+          <div class="muted"><b>Pendientes:</b> <span id="pendingCount">0</span></div>
+          <div class="muted"><b>Última sync:</b> <span id="lastSync">-</span></div>
+        </div>
+      </section>
+
+      <section id="panelDash" style="display:none;">
+        <h2>Tablero</h2>
+        <p class="muted">Visible solo para usuarios autorizados. Métricas en ventana móvil y semáforo de alertas tempranas.</p>
+
+        <div class="hr"></div>
+
+        <div class="grid3">
+          <div>
+            <label>Ventana (días)</label>
+            <select id="dashWindow">
+              <option value="14">14</option>
+              <option value="30" selected>30</option>
+              <option value="60">60</option>
+              <option value="90">90</option>
+            </select>
+          </div>
+          <div>
+            <label>Tipo informante</label>
+            <select id="dashTipo">
+              <option value="">(todos)</option>
+              <option value="oficina">Oficina</option>
+              <option value="comunidad">Comunidad</option>
+            </select>
+          </div>
+          <div>
+            <label>Comunidad</label>
+            <select id="dashComunidad">
+              <option value="">(todas)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <button id="btnDash" class="btn">Actualizar tablero</button>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="semaforo">
+          <div class="lights">
+            <div id="lightGreen" class="light"></div>
+            <div id="lightYellow" class="light"></div>
+            <div id="lightRed" class="light"></div>
+          </div>
+          <div>
+            <div id="semTitle" class="semTitle">Semáforo</div>
+            <div id="semMeta" class="muted">Sin datos</div>
+            <div id="semExplain" class="muted"></div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div id="kpis" class="kpis"></div>
+
+        <div class="hr"></div>
+
+        <h3>Ranking dimensiones</h3>
+        <div id="dimRank"></div>
+
+        <div class="hr"></div>
+
+        <h3>Muestra de registros</h3>
+        <div id="dashTable"></div>
+
+        <div id="dashMsg"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="./idb.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
