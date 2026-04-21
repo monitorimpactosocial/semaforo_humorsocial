@@ -1,0 +1,24 @@
+{
+  "name": "PARACEL Semáforo de Humor Social",
+  "short_name": "Semáforo PARACEL",
+  "description": "App offline para registro de sondeos de humor social con control de usuarios por rol.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2f5ef",
+  "theme_color": "#103832",
+  "icons": [
+    {
+      "src": "./assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

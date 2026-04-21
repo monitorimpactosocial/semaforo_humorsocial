@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#103832">
+  <meta name="description" content="Semáforo de Humor Social PARACEL - App offline instalable">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192.png">
+  <title>PARACEL · Semáforo de Humor Social</title>
+  <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+<body>
+  <div class="bg-shape bg-shape-a"></div>
+  <div class="bg-shape bg-shape-b"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <img src="./assets/icons/icon-192.svg" alt="PARACEL" class="brand-logo">
+      <div>
+        <p class="brand-kicker">PARACEL</p>
+        <h1>Semáforo de Humor Social</h1>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <span id="networkBadge" class="badge badge-online">En línea</span>
+      <button id="installBtn" class="btn btn-secondary hidden" type="button">Instalar App</button>
+      <button id="logoutBtn" class="btn btn-danger hidden" type="button">Salir</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section id="loginView" class="card auth-card">
+      <h2>Acceso seguro</h2>
+      <p class="muted">Ingresá con tu usuario asignado. La app funciona sin conexión una vez instalada.</p>
+      <form id="loginForm" class="stack">
+        <label class="field">
+          <span>Usuario</span>
+          <input id="loginUser" name="loginUser" autocomplete="username" required>
+        </label>
+        <label class="field">
+          <span>Contraseña</span>
+          <input id="loginPass" name="loginPass" type="password" autocomplete="current-password" required>
+        </label>
+        <button type="submit" class="btn btn-primary">Ingresar</button>
+      </form>
+      <p class="helper">Usuario inicial admin: <code>admin_demo</code> / <code>Admin@2026!</code></p>
+      <p id="loginMsg" class="message"></p>
+    </section>
+
+    <section id="appView" class="hidden">
+      <div class="toolbar card">
+        <div>
+          <h2 id="welcomeTitle">Bienvenido</h2>
+          <p id="welcomeMeta" class="muted"></p>
+        </div>
+        <div class="toolbar-actions">
+          <button id="tabSurveyBtn" class="tab-btn active" data-tab="survey" type="button">Nuevo sondeo</button>
+          <button id="tabPendingBtn" class="tab-btn" data-tab="pending" type="button">Pendientes</button>
+          <button id="tabUsersBtn" class="tab-btn hidden" data-tab="users" type="button">Usuarios</button>
+          <button id="tabSettingsBtn" class="tab-btn" data-tab="settings" type="button">Configuración</button>
+        </div>
+      </div>
+
+      <section id="tab-survey" class="card tab-panel active">
+        <div class="card-head">
+          <h3>Registrar sondeo</h3>
+          <span id="draftCount" class="badge badge-neutral">Pendientes: 0</span>
+        </div>
+        <form id="surveyForm" class="stack">
+          <div class="grid two">
+            <label class="field">
+              <span>Tipo de informante</span>
+              <input id="tipoInformante" required>
+            </label>
+            <label class="field">
+              <span>ID encuesta</span>
+              <input id="idEncuesta" readonly>
+            </label>
+          </div>
+
+          <div class="grid three">
+            <label class="field">
+              <span>Departamento</span>
+              <select id="departamento" required></select>
+            </label>
+            <label class="field">
+              <span>Distrito</span>
+              <select id="distrito" required></select>
+            </label>
+            <label class="field">
+              <span>Comunidad</span>
+              <input id="comunidad" list="comunidadList" required>
+              <datalist id="comunidadList"></datalist>
+            </label>
+          </div>
+
+          <div class="gps-box">
+            <div>
+              <p class="gps-title">Geolocalización</p>
+              <p id="gpsStatus" class="muted">Sin coordenadas.</p>
+            </div>
+            <button id="gpsBtn" class="btn btn-secondary" type="button">Capturar GPS</button>
+          </div>
+
+          <div id="questionnaire" class="stack"></div>
+
+          <label class="field">
+            <span>Comentario general</span>
+            <textarea id="comentarioGeneral" rows="3" placeholder="Observación general opcional"></textarea>
+          </label>
+
+          <button id="saveSurveyBtn" class="btn btn-primary" type="submit">Guardar sondeo</button>
+          <p id="surveyMsg" class="message"></p>
+        </form>
+      </section>
+
+      <section id="tab-pending" class="card tab-panel hidden">
+        <div class="card-head">
+          <h3>Datos locales y sincronización</h3>
+          <span id="pendingMeta" class="badge badge-neutral">0 sondeos pendientes</span>
+        </div>
+        <div class="actions-row">
+          <button id="exportCsvBtn" class="btn btn-secondary" type="button">Exportar CSV</button>
+          <button id="exportJsonBtn" class="btn btn-secondary" type="button">Exportar respaldo JSON</button>
+          <label class="btn btn-secondary btn-file">
+            Importar respaldo
+            <input id="importJsonInput" type="file" accept=".json,application/json">
+          </label>
+          <button id="markSyncedBtn" class="btn btn-primary" type="button">Marcar todo como sincronizado</button>
+        </div>
+        <div id="pendingList" class="stack"></div>
+        <p id="pendingMsg" class="message"></p>
+      </section>
+
+      <section id="tab-users" class="card tab-panel hidden">
+        <div class="card-head">
+          <h3>Administración de usuarios</h3>
+          <span class="badge badge-warning">Solo administrador</span>
+        </div>
+        <form id="userForm" class="stack">
+          <input id="userFormOriginal" type="hidden">
+          <div class="grid three">
+            <label class="field">
+              <span>Usuario</span>
+              <input id="userUsername" required>
+            </label>
+            <label class="field">
+              <span>Nombre</span>
+              <input id="userNombre" required>
+            </label>
+            <label class="field">
+              <span>Rol</span>
+              <select id="userRol" required>
+                <option value="admin">admin</option>
+                <option value="editor">editor</option>
+                <option value="usuario">usuario</option>
+              </select>
+            </label>
+          </div>
+          <div class="grid three">
+            <label class="field">
+              <span>Contraseña</span>
+              <input id="userPassword" type="password" autocomplete="new-password" placeholder="Requerida para crear">
+            </label>
+            <label class="field">
+              <span>Tipo informante por defecto</span>
+              <input id="userTipoInformante" placeholder="Ej: Autoridad local">
+            </label>
+            <label class="field switch">
+              <span>Activo</span>
+              <input id="userActivo" type="checkbox" checked>
+            </label>
+          </div>
+          <div class="actions-row">
+            <button id="saveUserBtn" class="btn btn-primary" type="submit">Guardar usuario</button>
+            <button id="cancelUserBtn" class="btn btn-secondary" type="button">Cancelar edición</button>
+          </div>
+        </form>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Rol</th>
+                <th>Activo</th>
+                <th>Tipo informante</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody"></tbody>
+          </table>
+        </div>
+        <p id="usersMsg" class="message"></p>
+      </section>
+
+      <section id="tab-settings" class="card tab-panel hidden">
+        <div class="card-head">
+          <h3>Configuración operativa</h3>
+        </div>
+        <div class="stack">
+          <p class="muted">
+            Esta versión funciona sin internet. Los sondeos se guardan en el dispositivo y pueden exportarse para consolidación central.
+          </p>
+          <ul class="flat-list">
+            <li>Instalación Android: abrir en Chrome, luego <strong>Instalar app</strong>.</li>
+            <li>Instalación iPhone: abrir en Safari, compartir, luego <strong>Añadir a pantalla de inicio</strong>.</li>
+            <li>Respaldo recomendado: exportar JSON al cierre de cada jornada de campo.</li>
+          </ul>
+          <button id="wipeDataBtn" class="btn btn-danger" type="button">Borrar datos locales de este dispositivo</button>
+          <p id="settingsMsg" class="message"></p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <template id="pendingItemTpl">
+    <article class="pending-item">
+      <div>
+        <h4></h4>
+        <p class="muted"></p>
+      </div>
+      <span class="badge badge-warning">Pendiente</span>
+    </article>
+  </template>
+
+  <script type="module" src="./assets/js/app.js"></script>
+</body>
+</html>

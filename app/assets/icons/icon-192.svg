@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1b5b50"/>
+      <stop offset="100%" stop-color="#103832"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="176" height="176" rx="36" fill="url(#g)"/>
+  <circle cx="96" cy="74" r="26" fill="#f3ba57"/>
+  <path d="M54 132c11-20 24-30 42-30s31 10 42 30" fill="none" stroke="#e9f5f1" stroke-width="12" stroke-linecap="round"/>
+  <text x="96" y="160" text-anchor="middle" font-family="Trebuchet MS, sans-serif" font-size="20" fill="#e9f5f1" font-weight="700">PARACEL</text>
+</svg>
